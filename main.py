@@ -17,6 +17,7 @@ make_single_window_app(game)
 # load topo widget
 # set_topo(game, topo)
 
+
 def make_topo_chess(game, topo):
     game.topo = topo
 
