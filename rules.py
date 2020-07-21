@@ -192,7 +192,7 @@ def start(game):
         with game.lock:
             while game.running:
                 game.lock.wait()
-                game.interrupt_handler()
+                game.interrupt_handler(game.event)
 
     game_thread = threading.Thread(target=f)
     game_thread.run()
