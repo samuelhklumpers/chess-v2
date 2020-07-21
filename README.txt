@@ -1,3 +1,11 @@
+Current goals:
+    [ ] run a game of normal chess
+        [ ] make normal chess game loop
+        [ ] make interface
+        [ ] make normal chess topology
+        [ ] make normal chess rules
+
+
 a game has 1 window
 	chess has 1 board
 		which is a topology with its atlas
