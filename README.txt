@@ -1,8 +1,8 @@
 Current goals:
     [ ] run a game of normal chess
-        [ ] make normal chess game loop
-        [ ] make interface
-        [ ] make normal chess topology
+        [x] make normal chess game loop
+        [x] make interface
+        [x] make normal chess topology
         [ ] make normal chess rules
 
 
