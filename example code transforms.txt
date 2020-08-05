@@ -1,73 +1,73 @@
 class Game:                                             |       class Game:
-	def __init__(self, ...):                            |       	def __init__(self):
-		...                                             |       		self.rules = []
-														|       
-														|       def make_chess(game):
-class Chess(Game):                                      |       	game.field = ...
-	def __init__(self, ...):          			        |       	
-		Game.__init__(self, ...)      			        |       	game.rules += [rule1]  # insert chess rules
-														|       	game.rules += [rule2]
-		self.field = ...              			        |       	
-														|       def make_blind(chess):
-		self.setup(...)               			        |       	...  # insert blind chess rules
-														|       
-	def method(self, ...):                              |       game = Game()
-		...                                             |		chess = make_chess(game)
-														|		blind_chess = make_blind(chess)
-	def rule1(self, ...):  # insert chess rules         |
-		...                                             |
-														|
-	def rule2(...                                       |
-														|       
-														|       
+    def __init__(self, ...):                            |           def __init__(self):
+        ...                                             |               self.rules = []
+                                                        |       
+                                                        |       def make_chess(game):
+class Chess(Game):                                      |           game.field = ...
+    def __init__(self, ...):                            |           
+        Game.__init__(self, ...)                        |           game.rules += [rule1]  # insert chess rules
+                                                        |           game.rules += [rule2]
+        self.field = ...                                |           
+                                                        |       def make_blind(chess):
+        self.setup(...)                                 |           ...  # insert blind chess rules
+                                                        |       
+    def method(self, ...):                              |       game = Game()
+        ...                                             |        chess = make_chess(game)
+                                                        |        blind_chess = make_blind(chess)
+    def rule1(self, ...):  # insert chess rules         |
+        ...                                             |
+                                                        |
+    def rule2(...                                       |
+                                                        |       
+                                                        |       
 class BlindChess(Chess):                                |       
-	...                    # insert blind chess rules   |       
-	
+    ...                    # insert blind chess rules   |       
+    
 
 
 
-class Board:                                            |  		class Board:
-	def __init__(self, size):                           |			def __init__(self, topo):
-		self.tiles = np.full((size, size), Tile())      |				self.topo = topo
-														|
-														|
-class Tile:                                             |		class Topo:
-	def __init__(self):                                 |			def __init__(self, tiles, atlas):
-		self.piece = None                               |				...
-														|
-	def set_piece(self):                                |		class Tile:
-		...                                             |			def __init__(self):
-														|				self.state = TileState()
-	def get_piece(...                                   |
-														|
-														|		class TileState:
-class Piece:                                            |			def __init__(self):
-	...                                                 |				pass
-														|
-														|		
-														|		def normal_chess_state(tilestate):
-														|			tilestate.piece = None
-														|
+class Board:                                            |          class Board:
+    def __init__(self, size):                           |            def __init__(self, topo):
+        self.tiles = np.full((size, size), Tile())      |                self.topo = topo
+                                                        |
+                                                        |
+class Tile:                                             |        class Topo:
+    def __init__(self):                                 |            def __init__(self, tiles, atlas):
+        self.piece = None                               |                ...
+                                                        |
+    def set_piece(self):                                |        class Tile:
+        ...                                             |            def __init__(self):
+                                                        |                self.state = TileState()
+    def get_piece(...                                   |
+                                                        |
+                                                        |        class TileState:
+class Piece:                                            |            def __init__(self):
+    ...                                                 |                pass
+                                                        |
+                                                        |        
+                                                        |        def normal_chess_state(tilestate):
+                                                        |            tilestate.piece = None
+                                                        |
 
 
 
-class Game:                                             |		class GameLoop:
-	def __init__(self):                                 |			def __init__(self):
-		...                                             |				self.locks = []
-														|
-	def run(self):                                      |		def make_chess(game):
-		...  # rules                                    |			turn_based_rule(game)
-														|			win_rule(game) ...
-														|
-		# more rules                                    |		def turn_based_rule(game): ...
-		# even more rules                               |		
-														|		def win_rule(game): ...
-														|
-class GameInst2:                                        |		def movement_rule(game): ...
-	...  # even more different rules                    |		
-														|		def normal_chess_drawing_rule(game): ...
-														|
-														|		def make_different_chess(game):
-														|			turn_based_rule(game)
-														|			win_rule(game)
-														|			different_movement_rule(game)
+class Game:                                             |        class GameLoop:
+    def __init__(self):                                 |            def __init__(self):
+        ...                                             |                self.locks = []
+                                                        |
+    def run(self):                                      |        def make_chess(game):
+        ...  # rules                                    |            turn_based_rule(game)
+                                                        |            win_rule(game) ...
+                                                        |
+        # more rules                                    |        def turn_based_rule(game): ...
+        # even more rules                               |        
+                                                        |        def win_rule(game): ...
+                                                        |
+class GameInst2:                                        |        def movement_rule(game): ...
+    ...  # even more different rules                    |        
+                                                        |        def normal_chess_drawing_rule(game): ...
+                                                        |
+                                                        |        def make_different_chess(game):
+                                                        |            turn_based_rule(game)
+                                                        |            win_rule(game)
+                                                        |            different_movement_rule(game)
