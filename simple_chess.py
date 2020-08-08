@@ -4,7 +4,7 @@ from boards import Topology, Chart, Tile, ChessState
 from core import SimpleChess, set_window, set_topo, set_input_buffer, do_topo_widget, load_chess_state, run_game,\
     game_thread
 from online import make_online
-from pieces import Piece, create_piece
+from pieces import Piece, create_piece, piece_move_iter
 from ui import SelectMoveBuffer, make_local
 
 
@@ -56,7 +56,33 @@ def create_normal_board():
     centre = tiles[xsize // 2, ysize // 2]
     tiles = tiles.flatten()
 
-    return Topology(tiles, [Chart(centre, tiles)])
+    return Topology(tiles, [Chart(centre, tiles)], None)
+
+
+class DrawSelect:
+    def __init__(self):
+        self.drawn = {"select": None, "moves": []}
+
+    def draw(self, topo, click, display):
+        self.drawn["select"] = click
+
+        display.colour(click, "red")
+
+        piece = click.piece
+
+        if piece:
+            for tile, _ in piece_move_iter(piece, topo, click):
+                self.drawn["moves"] += [tile]
+
+                display.colour(tile, "green")
+
+    def undraw(self, display):
+        display.colour(self.drawn["select"], "gray")
+
+        for tile in self.drawn["moves"]:
+            display.colour(tile, "gray")
+
+        self.drawn = {"select": None, "moves": []}
 
 
 def do_simple_chess():
@@ -64,13 +90,15 @@ def do_simple_chess():
 
     set_window(game)
 
-    set_topo(game, create_normal_board())
+    topo = create_normal_board()
+    topo.game = game
+    set_topo(game, topo)
 
     do_topo_widget(game)
 
     load_chess_state(game, ChessState(game))
 
-    set_input_buffer(game, SelectMoveBuffer())
+    set_input_buffer(game, SelectMoveBuffer(DrawSelect()))
 
     make_local(game)
 
@@ -84,13 +112,15 @@ def do_online_chess():
 
     set_window(game)
 
-    set_topo(game, create_normal_board())
+    topo = create_normal_board()
+    topo.game = game
+    set_topo(game, topo)
 
     do_topo_widget(game)
 
     load_chess_state(game, ChessState(game))
 
-    set_input_buffer(game, SelectMoveBuffer())
+    set_input_buffer(game, SelectMoveBuffer(DrawSelect()))
 
     addr = input("Remote address: ")
     rport = input("Remote port: ")

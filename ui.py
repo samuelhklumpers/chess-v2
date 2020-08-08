@@ -4,10 +4,11 @@ import numpy as np
 
 
 class SelectMoveBuffer:
-    def __init__(self):
+    def __init__(self, drawer):
         self.game = None
         self.buf = None
         self.move_target = None
+        self.drawer = drawer
         self.select_display = None
 
 
@@ -137,13 +138,13 @@ def click(game, tile):
 
 def put_two(clickbuf, click):
     if clickbuf.buf:
-        clickbuf.select_display.colour(clickbuf.buf, "gray")
+        clickbuf.drawer.undraw(clickbuf.select_display)
         clickbuf.move_target.move(clickbuf.buf, click)
         clickbuf.buf = None
         clickbuf.game.root.after(0, clickbuf.select_display.draw)
     else:
         clickbuf.buf = click
-        clickbuf.select_display.colour(click, "red")
+        clickbuf.drawer.draw(clickbuf.game.topo, click, clickbuf.select_display)
 
 
 def local_interrupt_handler(game):

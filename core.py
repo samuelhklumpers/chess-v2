@@ -10,6 +10,7 @@ class SimpleChess:
         self.topo = None
         self.topo_widget = None
         self.turn = 0
+        self.players = 2
         self.clicked = None
         self.cond = None
         self.interrupt = None
@@ -19,6 +20,10 @@ class SimpleChess:
         self.interrupt_handler = None
         self.shutdown = None
         self.thread_targets = []
+
+
+def get_turn(game):
+    return game.turn % game.players
 
 
 def set_window(game, geo="600x600"):

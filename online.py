@@ -1,5 +1,6 @@
 import socket
 
+from core import get_turn
 from ui import put_two, interrupt_game, set_interrupt_handler
 
 
@@ -36,7 +37,7 @@ def make_online(game, local_player, remote, rport, lport=None):
 
 def online_interrupt_handler(game):
     if game.interrupt[0] == "click":
-        if game.turn == game.local_player:
+        if get_turn(game) == game.local_player:
             click = game.interrupt[1]
 
             put_two(game.ibuf, click)
@@ -45,7 +46,7 @@ def online_interrupt_handler(game):
 
             game.socket.send(f"{tile_index}".encode())
     elif game.interrupt[0] == "socket":
-        if game.turn != game.local_player:
+        if get_turn(game) != game.local_player:
             tile_index = game.interrupt[1]
 
             click = game.topo.tiles[tile_index]

@@ -1,15 +1,19 @@
+from functools import partial
+
 import numpy as np
 import itertools as itr
 
+from core import get_turn
 from pieces import piece_move_iter
 
 
 class Topology:
-    def __init__(self, tiles, atlas):
+    def __init__(self, tiles, atlas, game):
         self.tiles = tiles
         self.atlas = atlas
         self.circle = 2 * np.pi
         self.epsilon = 1e-5
+        self.game = game
 
     def get_charts(self, tile):
         return [chart for chart in self.atlas if tile in chart.tiles]
@@ -42,27 +46,30 @@ class ChessState:
         self.topo = None
         self.limit = 100
         self.game = game
-
-    def get_moves(self, a, piece):
-        return itr.islice(piece_move_iter(piece, self.topo, a), self.limit)
-
-    def move(self, a, b):
-        piece = a.piece
-
-        if not piece:
-            return
-
-        if piece.owner != self.game.turn:
-            return
-
-        if b in self.get_moves(a, piece):
-            a.piece = None
-            b.piece = piece
-
-            piece.moved = True
-
-            self.game.turn = 1 - self.game.turn
+        self.move = partial(move, self)
 
 
-def checked_tiles(topo):
+def get_moves(state, a, piece):
+    return itr.islice(piece_move_iter(piece, state.topo, a), state.limit)
+
+
+def move(state, a, b):
+    piece = a.piece
+
+    if not piece:
+        return False
+
+    if piece.owner != get_turn(state.game):
+        return False
+
+    for result_b, result_f in get_moves(state, a, piece):
+        if b == result_b:
+            result_f(state)
+
+            return True
+
+    return False
+
+
+def find_checked_tiles(topo):
     ...  # mark all checked tiles in ChessState.move
