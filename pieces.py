@@ -23,14 +23,14 @@ def create_move(a, b):
 
 def create_turn():
     def f(state):
-        state.game.turn += 1
+        state.turn += 1
 
     return f
 
 
 def create_moved(piece):
     def f(state):
-        piece.moved = state.game.turn
+        piece.moved = state.turn
 
     return f
 
@@ -67,7 +67,9 @@ def king_move_iter(piece, topo, tile):
 
 
 def king_move_iter2(piece, topo, tile):
-    yield from itr.chain(king_move_iter(piece, topo, tile), castle_iter(piece, topo, tile))
+    for b, f in itr.chain(king_move_iter(piece, topo, tile), castle_iter(piece, topo, tile)):
+        if all(c.owner == piece.owner for c in b.checks):
+            yield b, f
 
 
 def queen_move_iter(piece, topo, tile):
@@ -183,7 +185,7 @@ def pawn_move_iter2(piece, topo, tile):
 
                 for neigh2, vec_out in neigh.neighs.items():
                     if topo.is_angle(vec_in, vec_out, 0.5):
-                        yield neigh2, append_move(create_normal_move(tile, neigh2, piece), create_passant(piece, topo.game.turn))
+                        yield neigh2, append_move(create_normal_move(tile, neigh2, piece), create_passant(piece, topo.state.turn))
         elif 0 < topo.angle(vec, [0, m]) / topo.circle < 0.25 and neigh.piece:
             yield neigh, create_normal_move(tile, neigh, piece)
 
@@ -194,8 +196,14 @@ def castle_iter(king, topo, tile):
     if king.moved:
         return
 
+    if not all(c.owner == king.owner for c in tile.checks):
+        return
+
     for neigh1 in tile.neighs:
         vec_in = neigh1.neighs[tile]
+
+        if not all(c.owner == king.owner for c in neigh1.checks):
+            continue
 
         for neigh2, vec_out in neigh1.neighs.items():
             if topo.is_angle(vec_in, vec_out, 0.5):
@@ -232,7 +240,7 @@ def en_passant_iter(pawn, topo, tile):
             if not pawn2.passant:
                 continue
 
-            if not pawn2.passant == topo.game.turn - 1:
+            if not pawn2.passant == topo.state.turn - 1:
                 continue
 
             m2 = 1 if pawn2.owner == 0 else -1

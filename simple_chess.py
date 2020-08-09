@@ -1,6 +1,6 @@
 import numpy as np
 
-from boards import Topology, Chart, Tile, ChessState
+from boards import Topology, Chart, Tile, ChessState, add_checked
 from core import SimpleChess, set_window, set_topo, set_input_buffer, do_topo_widget, load_chess_state, run_game,\
     game_thread
 from online import make_online
@@ -16,6 +16,7 @@ def create_normal_board():
     for y in range(ysize):
         for x in range(xsize):
             tiles[x, y] = tile = Tile()
+            add_checked(tile)
 
             if x > 0:
                 tile.add_neigh(tiles[x - 1, y], np.array([-1, 0]))
@@ -91,12 +92,12 @@ def do_simple_chess():
     set_window(game)
 
     topo = create_normal_board()
-    topo.game = game
     set_topo(game, topo)
 
     do_topo_widget(game)
 
-    load_chess_state(game, ChessState(game))
+    load_chess_state(game, ChessState())
+    topo.state = game.chess_state
 
     set_input_buffer(game, SelectMoveBuffer(DrawSelect()))
 
@@ -113,12 +114,12 @@ def do_online_chess():
     set_window(game)
 
     topo = create_normal_board()
-    topo.game = game
     set_topo(game, topo)
 
     do_topo_widget(game)
 
-    load_chess_state(game, ChessState(game))
+    load_chess_state(game, ChessState())
+    topo.state = game.chess_state
 
     set_input_buffer(game, SelectMoveBuffer(DrawSelect()))
 
@@ -135,5 +136,5 @@ def do_online_chess():
     run_game(game)
 
 
-do_simple_chess()
+do_online_chess()
 
