@@ -126,12 +126,16 @@ def do_online_chess():
     addr = input("Remote address: ")
     rport = input("Remote port: ")
     lport = input("Local port: ")
+    room = input("Room (leave empty if direct): ")
     colour = input("Colour: ")
 
     game.thread_targets += [game_thread(game)]
 
     make_local(game)
     make_online(game, int(colour), addr, int(rport), int(lport))
+
+    if room:
+        game.socket.send(room.encode())
 
     run_game(game)
 
